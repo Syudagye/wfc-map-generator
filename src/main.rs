@@ -55,7 +55,7 @@ fn main() {
     while !is_collapsed(&grid) {
         let (y, x) = get_min_enthropy(&grid);
 
-        let mut cell = &mut grid[y][x];
+        let cell = &mut grid[y][x];
 
         // Removing edge cases
         *cell = cell
