@@ -1,4 +1,4 @@
-# Wave collapse function map generator
+# Wave function collapse map generator
 
 A little implementation of the Wave Collapse Function algorithm for creating procedurally generated maps/paths.
 
