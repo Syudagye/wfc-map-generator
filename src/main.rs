@@ -1,6 +1,7 @@
 use std::{fmt::Debug};
 
 use rand::prelude::*;
+use clap::Parser;
 
 #[derive(Debug, Clone)]
 struct Connection {
@@ -22,8 +23,23 @@ impl Connection {
     }
 }
 
+#[derive(Parser, Debug)]
+#[clap(author, version, about, long_about = None)]
+struct Args {
+    #[clap(short, long)]
+    verbose: bool,
+
+    #[clap(short, long, default_value_t = 48)]
+    width: usize,
+
+    #[clap(short, long, default_value_t = 24)]
+    height: usize,
+}
+
 fn main() {
-    let (width, height) = (128, 50);
+    let args = Args::parse();
+
+    let (width, height) = (args.width, args.height);
 
     let things = [
         '┘', '┐', '┌', '└', '┤', '┴', '┬', '├', '─', '│', '┼', ' ', '╷', '╶', '╴', '╵',
@@ -50,6 +66,8 @@ fn main() {
     let mut grid: Vec<Vec<Vec<Connection>>> = vec![vec![connections.clone(); width]; height];
 
     let mut rng = thread_rng();
+
+    println!("Generating a {}x{} grid...", width, height);
 
     // Main loop
     while !is_collapsed(&grid) {
@@ -112,8 +130,12 @@ fn main() {
             }
         }
 
-        render(&grid, &things);
+        if args.verbose {
+            render(&grid, &things);
+        }
     }
+    println!("Done ! Here is the final grid: ");
+    render(&grid, &things);
     // TODO: generate a sigle tree fome the bigger path generated
     //       and clean all smaller paths
 }
